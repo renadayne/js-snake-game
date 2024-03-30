@@ -12,26 +12,26 @@
     <canvas id="canvas" width="400" height="400"></canvas>
     <script>
         function runGame() {
-            var canvas, ctx;
+            let canvas, ctx;
 
             window.onload = function() {
                 canvas = document.getElementById("canvas");
                 ctx = canvas.getContext("2d");
                 document.addEventListener("keydown", keyDownEvent);
 
-                var x = 8;
+                let x = 8;
                 setInterval(draw, 1000 / x);
             };
 
-            var defaultTailSize = 3;
-            var tailSize = defaultTailSize;
-            var snakeTrail = [];
-            var snakeX = snakeY = 10;
+            let defaultTailSize = 3;
+            let tailSize = defaultTailSize;
+            let snakeTrail = [];
+            let snakeX = snakeY = 10;
 
-            var gridSize = tileSize = 20; // 20 x 20 = 400
-            var nextX = nextY = 0;
+            let gridSize = tileSize = 20; // 20 x 20 = 400
+            let nextX = nextY = 0;
 
-            var baitX = (baitY = 15);
+            let baitX = (baitY = 15);
 
             function keyDownEvent(e) {
                 switch (e.keyCode) {
@@ -86,7 +86,7 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                 ctx.fillStyle = "green";
-                for (var i = 0; i < snakeTrail.length; i++) {
+                for (let i = 0; i < snakeTrail.length; i++) {
                     ctx.fillRect(
                         snakeTrail[i].x * tileSize,
                         snakeTrail[i].y * tileSize,
