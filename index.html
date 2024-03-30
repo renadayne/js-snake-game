@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- canvas - 2D animation card -->
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script>
+        function runGame() {
+            var canvas, ctx;
+
+            window.onload = function() {
+                canvas = document.getElementById("canvas");
+                ctx = canvas.getContext("2d");
+                document.addEventListener("keydown", keyDownEvent);
+
+                var x = 8;
+                setInterval(draw, 1000 / x);
+            };
+
+            var defaultTailSize = 3;
+            var tailSize = defaultTailSize;
+            var snakeTrail = [];
+            var snakeX = snakeY = 10;
+
+            var gridSize = tileSize = 20; // 20 x 20 = 400
+            var nextX = nextY = 0;
+
+            var baitX = (baitY = 15);
+
+            function keyDownEvent(e) {
+                switch (e.keyCode) {
+                    case 37:
+                        if (nextX !== 1) {
+                            nextX = -1;
+                            nextY = 0;
+                        }
+                        break;
+                    case 38:
+                        if (nextY !== 1) {
+                            nextX = 0;
+                            nextY = -1;
+                        }
+                        break;
+                    case 39:
+                        if (nextX !== -1) {
+                            nextX = 1;
+                            nextY = 0;
+                        }
+                        break;
+                    case 40:
+                        if (nextY !== -1) {
+                            nextX = 0;
+                            nextY = 1;
+                        }
+                        break;
+                }
+            }
+
+            function draw() {
+                snakeX += nextX;
+                snakeY += nextY;
+                if (snakeX < 0) {
+                    snakeX = gridSize - 1;
+                }
+                if (snakeX > gridSize - 1) {
+                    snakeX = 0;
+                }
+                if (snakeY < 0) {
+                    snakeY = gridSize - 1;
+                }
+                if (snakeY > gridSize - 1) {
+                    snakeY = 0;
+                }
+                if (snakeX == baitX && snakeY == baitY) {
+                    tailSize++;
+                    baitX = Math.floor(Math.random() * gridSize);
+                    baitY = Math.floor(Math.random() * gridSize);
+                }
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = "green";
+                for (var i = 0; i < snakeTrail.length; i++) {
+                    ctx.fillRect(
+                        snakeTrail[i].x * tileSize,
+                        snakeTrail[i].y * tileSize,
+                        tileSize,
+                        tileSize
+                    );
+                    // kiểm tra xem con rắn có cắn nó không
+                    if (snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
+                        tailSize = defaultTailSize;
+                    }
+                }
+
+                snakeTrail.push({
+                    x: snakeX,
+                    y: snakeY
+                });
+                while (snakeTrail.length > tailSize) {
+                    snakeTrail.shift();
+                }
+
+                ctx.fillStyle = "red";
+                ctx.fillRect(baitX * tileSize, baitY * tileSize, tileSize, tileSize);
+            }
+
+            runGame();
+        }
+    </script>
+    <script>
+        runGame();
+    </script>
+</body>
+
+</html>
